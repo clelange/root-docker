@@ -1,0 +1,10 @@
+# ROOT patch branches that this repository publishes as nightly images.
+# Keep this list intentionally human-curated so feature branches are not
+# published automatically.
+v6-40-00-patches
+v6-38-00-patches
+v6-36-00-patches
+v6-32-00-patches
+v6-30-00-patches
+v6-28-00-patches
+v6-26-00-patches

@@ -4,9 +4,81 @@ Maintained by: [the ROOT team](https://root.cern/) and collaborators
 
 Where to get help: [the ROOT forum](https://root-forum.cern.ch/)
 
-## Supported tags and respective Dockerfile links
+## GHCR images
 
-### Latest images
+<!-- BEGIN ROOT-GHCR-IMAGES -->
+
+Images built by the GitHub Actions automation are published to GHCR.
+The current development target is `ghcr.io/clelange/root`.
+When this workflow runs in `root-project/root-docker`, set the repository
+variable `GHCR_NAMESPACE=root-project` to publish the same image tags under
+`ghcr.io/root-project/root` without changing the workflow.
+
+Pull the latest supported stable release with:
+
+```
+docker pull ghcr.io/clelange/root:latest
+```
+
+### Active release images
+
+| Image tag | ROOT tag | Dockerfile |
+| --- | --- | --- |
+| `ghcr.io/clelange/root:6.38.04-ubuntu24.04` | `v6-38-04` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.38.02-ubuntu24.04` | `v6-38-02` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.38.00-ubuntu24.04` | `v6-38-00` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.36.10-ubuntu24.04` | `v6-36-10` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.36.08-ubuntu24.04` | `v6-36-08` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.36.06-ubuntu24.04` | `v6-36-06` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.36.04-ubuntu24.04` | `v6-36-04` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.36.02-ubuntu24.04` | `v6-36-02` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.36.00-ubuntu24.04` | `v6-36-00` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.22-ubuntu24.04` | `v6-32-22` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.20-ubuntu24.04` | `v6-32-20` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.18-ubuntu24.04` | `v6-32-18` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.16-ubuntu24.04` | `v6-32-16` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.14-ubuntu24.04` | `v6-32-14` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.12-ubuntu24.04` | `v6-32-12` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.10-ubuntu24.04` | `v6-32-10` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.08-ubuntu24.04` | `v6-32-08` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.06-ubuntu24.04` | `v6-32-06` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.04-ubuntu24.04` | `v6-32-04` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.02-ubuntu24.04` | `v6-32-02` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.32.00-ubuntu24.04` | `v6-32-00` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.30.10-ubuntu24.04` | `v6-30-10` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.30.08-ubuntu22.04` | `v6-30-08` | [ubuntu2204/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2204/Dockerfile) |
+| `ghcr.io/clelange/root:6.30.06-ubuntu22.04` | `v6-30-06` | [ubuntu2204/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2204/Dockerfile) |
+| `ghcr.io/clelange/root:6.30.04-ubuntu22.04` | `v6-30-04` | [ubuntu2204/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2204/Dockerfile) |
+| `ghcr.io/clelange/root:6.30.02-ubuntu22.04` | `v6-30-02` | [ubuntu2204/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2204/Dockerfile) |
+| `ghcr.io/clelange/root:6.28.14-ubuntu24.04` | `v6-28-14` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.28.12-ubuntu22.04` | `v6-28-12` | [ubuntu2204/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2204/Dockerfile) |
+| `ghcr.io/clelange/root:6.28.10-ubuntu22.04` | `v6-28-10` | [ubuntu2204/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2204/Dockerfile) |
+| `ghcr.io/clelange/root:6.26.18-ubuntu22.04` | `v6-26-18` | [ubuntu2204/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2204/Dockerfile) |
+| `ghcr.io/clelange/root:6.26.16-ubuntu22.04` | `v6-26-16` | [ubuntu2204/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2204/Dockerfile) |
+| `ghcr.io/clelange/root:6.26.14-ubuntu22.04` | `v6-26-14` | [ubuntu2204/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2204/Dockerfile) |
+
+`ghcr.io/clelange/root:latest` points to `6.38.04-ubuntu24.04`.
+
+### Nightly branch images
+
+Tracked patch branches are rebuilt nightly from source and tagged with the
+upstream branch name.
+
+| Image tag | Upstream branch |
+| --- | --- |
+| `ghcr.io/clelange/root:v6-40-00-patches` | `v6-40-00-patches` |
+| `ghcr.io/clelange/root:v6-38-00-patches` | `v6-38-00-patches` |
+| `ghcr.io/clelange/root:v6-36-00-patches` | `v6-36-00-patches` |
+| `ghcr.io/clelange/root:v6-32-00-patches` | `v6-32-00-patches` |
+| `ghcr.io/clelange/root:v6-30-00-patches` | `v6-30-00-patches` |
+| `ghcr.io/clelange/root:v6-28-00-patches` | `v6-28-00-patches` |
+| `ghcr.io/clelange/root:v6-26-00-patches` | `v6-26-00-patches` |
+
+<!-- END ROOT-GHCR-IMAGES -->
+
+## Legacy Docker Hub tags and Dockerfile links
+
+### Latest legacy image
 
 * [`latest`](https://github.com/root-project/root-docker/blob/6.38.00-ubuntu25.10/ubuntu2510/Dockerfile) -> [`6.38.00-ubuntu25.10`](https://github.com/root-project/root-docker/blob/6.38.00-ubuntu25.10/ubuntu2510/Dockerfile)
 
@@ -45,15 +117,15 @@ Different images provide ROOT installations built with different C++ standards. 
 The ROOT team provides several Docker images. In order to run containers, you must [have Docker installed](https://www.docker.com/community-edition#/download).
 You can start a container by running the following command in your terminal which will start the latest stable release of ROOT:
 ```
-docker run --rm -it rootproject/root
+docker run --rm -it ghcr.io/clelange/root:latest
 ```
 Note that the `--rm` flag tells Docker to remove the container, together with its data, once it is shut down. In order to persist data, it is recommended to mount a directory on the container. For example, to mount your home directory on Linux and Mac, run:
 ```
-docker run --rm -it -v ~:/userhome --user $(id -u) rootproject/root
+docker run --rm -it -v ~:/userhome --user $(id -u) ghcr.io/clelange/root:latest
 ```
 On Windows, you have to specify the full path to your user directory:
 ```
-docker run --rm -it -v C:\\Users\\Username:/userhome rootproject/root
+docker run --rm -it -v C:\\Users\\Username:/userhome ghcr.io/clelange/root:latest
 ```
 
 The `-v` option tells Docker to mount the home directory (`~`) to `/userhome` in the container. `--user $(id -u)` signs us in with the same userid as in the host in order to allow reading/writing to the mounted directory. This is not necessary on Windows. Mac and Windows users does however have to mark the drives or areas they want to mount as shared in the Docker application under settings.
@@ -67,7 +139,7 @@ The `-v` option tells Docker to mount the home directory (`~`) to `/userhome` in
 To use graphics, make sure you are in an X11 session and run the following command:
 
 ```
-docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --rm -it --user $(id -u) rootproject/root root
+docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --rm -it --user $(id -u) ghcr.io/clelange/root:latest root
 ```
 
 On some platforms (e.g., Arch Linux) connections to the X server must be allowed explicitly by executing `xhost local:root` or an equivalent command (see e.g. [this page](https://wiki.archlinux.org/index.php/Xhost) for more information on `xhost` and its possible security implications).
@@ -83,7 +155,7 @@ xhost + $ip
 ```
 This will start XQuartz and whitelist your local IP address. Finally, you can start up ROOT with the following command:
 ```
-docker run --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$ip:0 rootproject/root root
+docker run --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$ip:0 ghcr.io/clelange/root:latest root
 ```
 
 ##### Windows
@@ -91,7 +163,7 @@ To enable graphics, you must have [Xming](https://sourceforge.net/projects/xming
 ``Add-Content 'C:\Program Files (x86)\Xming\X0.hosts' "`r`n10.0.75.2"`` 
 Restart Xming and start the container with the following command: 
 ```
-docker run --rm -it -e DISPLAY=10.0.75.1:0 rootproject/root
+docker run --rm -it -e DISPLAY=10.0.75.1:0 ghcr.io/clelange/root:latest
 ```
 
 ## Examples
