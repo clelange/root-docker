@@ -1,0 +1,253 @@
+name: Build ROOT Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Discover and update metadata without pushing images or committing README changes"
+        required: false
+        type: boolean
+        default: false
+      force_rebuild:
+        description: "Rebuild release images even when the GHCR tag already exists"
+        required: false
+        type: boolean
+        default: false
+  schedule:
+    - cron: "37 2 * * *"
+  pull_request:
+    paths:
+      - ".github/workflows/images.yml"
+      - "README.md"
+      - "scripts/**"
+      - "tests/**"
+      - "supported-branches.txt"
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAMESPACE: ${{ vars.GHCR_NAMESPACE || 'clelange' }}
+  IMAGE_NAME: root
+
+jobs:
+  validate:
+    name: Validate automation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Run actionlint
+        uses: rhysd/actionlint@v1.7.12
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+  discover:
+    name: Discover images
+    runs-on: ubuntu-latest
+    needs: validate
+    permissions:
+      contents: read
+      packages: read
+    outputs:
+      release_matrix: ${{ steps.plan.outputs.release_matrix }}
+      nightly_matrix: ${{ steps.plan.outputs.nightly_matrix }}
+      release_count: ${{ steps.plan.outputs.release_count }}
+      nightly_count: ${{ steps.plan.outputs.nightly_count }}
+      missing_branches_json: ${{ steps.plan.outputs.missing_branches_json }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GHCR
+        if: ${{ github.event_name != 'pull_request' && inputs.dry_run != true && github.ref_name == github.event.repository.default_branch }}
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Discover release and nightly matrices
+        id: plan
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
+        run: |
+          args=(--image "$IMAGE" --plan-json build-plan.json --github-output "$GITHUB_OUTPUT")
+          if [[ "${{ github.event_name }}" != "pull_request" && "${{ inputs.dry_run }}" != "true" && "${{ inputs.force_rebuild }}" != "true" && "${{ github.ref_name }}" == "${{ github.event.repository.default_branch }}" ]]; then
+            args+=(--skip-existing)
+          fi
+          python scripts/root_images.py plan "${args[@]}"
+
+      - name: Print discovery summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          plan = json.loads(Path("build-plan.json").read_text())
+          print(f"Image: {plan['image']}")
+          print(f"Release images to build: {len(plan['release_images'])}")
+          print(f"Nightly images to build: {len(plan['nightly_images'])}")
+          print(f"Untracked upstream patch branches: {len(plan['missing_branches'])}")
+          PY
+
+  build-release:
+    name: Build release image
+    runs-on: ubuntu-latest
+    needs: discover
+    if: ${{ github.event_name != 'pull_request' && inputs.dry_run != true && github.ref_name == github.event.repository.default_branch && needs.discover.outputs.release_count != '0' }}
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.discover.outputs.release_matrix) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push release image
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          pull: true
+          push: true
+          tags: ${{ join(matrix.tags, '\n') }}
+          build-args: ${{ join(matrix.build_args, '\n') }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ matrix.root_version }}
+
+      - name: Smoke test release image
+        run: docker run --rm "${{ matrix.primary_tag }}" root-config --version
+
+  build-nightly:
+    name: Build nightly branch image
+    runs-on: ubuntu-latest
+    needs: discover
+    if: ${{ github.event_name != 'pull_request' && inputs.dry_run != true && github.ref_name == github.event.repository.default_branch && needs.discover.outputs.nightly_count != '0' }}
+    timeout-minutes: 360
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix: ${{ fromJSON(needs.discover.outputs.nightly_matrix) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push nightly image
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          pull: true
+          push: true
+          tags: ${{ join(matrix.tags, '\n') }}
+          build-args: ${{ join(matrix.build_args, '\n') }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ matrix.branch }}
+
+      - name: Smoke test nightly image
+        run: docker run --rm "${{ matrix.primary_tag }}" root-config --version
+
+  publish-metadata:
+    name: Publish README metadata
+    runs-on: ubuntu-latest
+    needs:
+      - discover
+      - build-release
+      - build-nightly
+    if: >-
+      ${{
+        always() &&
+        github.event_name != 'pull_request' &&
+        inputs.dry_run != true &&
+        github.ref_name == github.event.repository.default_branch &&
+        needs.discover.result == 'success' &&
+        (needs.build-release.result == 'success' || needs.build-release.result == 'skipped') &&
+        (needs.build-nightly.result == 'success' || needs.build-nightly.result == 'skipped')
+      }}
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Regenerate README image metadata
+        id: plan
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
+        run: |
+          python scripts/root_images.py plan \
+            --image "$IMAGE" \
+            --plan-json build-plan.json \
+            --github-output "$GITHUB_OUTPUT"
+          python scripts/root_images.py update-readme --plan-json build-plan.json
+
+      - name: Commit README update
+        run: |
+          if git diff --quiet README.md; then
+            echo "README image metadata is already up to date"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update ROOT image metadata"
+          git push
+
+      - name: Render untracked branch issue body
+        if: ${{ steps.plan.outputs.missing_branches_json != '[]' }}
+        run: python scripts/root_images.py missing-branches-issue --plan-json build-plan.json > missing-branches.md
+
+      - name: Upsert untracked branch issue
+        if: ${{ steps.plan.outputs.missing_branches_json != '[]' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          title="Track new upstream ROOT patch branches"
+          number="$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number')"
+          if [[ -n "$number" && "$number" != "null" ]]; then
+            gh issue edit "$number" --title "$title" --body-file missing-branches.md
+          else
+            gh issue create --title "$title" --body-file missing-branches.md
+          fi
