@@ -131,8 +131,8 @@ jobs:
           file: ${{ matrix.dockerfile }}
           pull: true
           push: true
-          tags: ${{ join(matrix.tags, '\n') }}
-          build-args: ${{ join(matrix.build_args, '\n') }}
+          tags: ${{ join(matrix.tags, ',') }}
+          build-args: ${{ join(matrix.build_args, ',') }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
@@ -175,8 +175,8 @@ jobs:
           file: ${{ matrix.dockerfile }}
           pull: true
           push: true
-          tags: ${{ join(matrix.tags, '\n') }}
-          build-args: ${{ join(matrix.build_args, '\n') }}
+          tags: ${{ join(matrix.tags, ',') }}
+          build-args: ${{ join(matrix.build_args, ',') }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
