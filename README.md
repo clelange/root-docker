@@ -27,6 +27,7 @@ docker pull ghcr.io/clelange/root:latest
 | `ghcr.io/clelange/root:6.38.04-ubuntu24.04` | `v6-38-04` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
 | `ghcr.io/clelange/root:6.38.02-ubuntu24.04` | `v6-38-02` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
 | `ghcr.io/clelange/root:6.38.00-ubuntu24.04` | `v6-38-00` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
+| `ghcr.io/clelange/root:6.36.12-ubuntu24.04` | `v6-36-12` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
 | `ghcr.io/clelange/root:6.36.10-ubuntu24.04` | `v6-36-10` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
 | `ghcr.io/clelange/root:6.36.08-ubuntu24.04` | `v6-36-08` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
 | `ghcr.io/clelange/root:6.36.06-ubuntu24.04` | `v6-36-06` | [ubuntu2404/Dockerfile](https://github.com/root-project/root-docker/blob/master/ubuntu2404/Dockerfile) |
