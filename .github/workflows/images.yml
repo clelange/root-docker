@@ -13,8 +13,9 @@ on:
         required: false
         type: boolean
         default: false
-  schedule:
-    - cron: "37 2 * * *"
+  # Temporarily disabled while nightly image builds are failing in the fork.
+  # schedule:
+  #   - cron: "37 2 * * *"
   pull_request:
     paths:
       - ".github/workflows/images.yml"
